@@ -11,6 +11,7 @@ Simple Mafia role assigner.
 - [ ] Role management
 - [ ] Session tracking
 - [ ] Theme switcher
+- [ ] Hide killed player role
 
 
 ## Roles

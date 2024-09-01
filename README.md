@@ -1,9 +1,9 @@
-# Nightfall
+# Tramonto
 
 Simple Mafia role assigner.
 
 >[!CAUTION]
->Nightfall is currently in the early development stage!
+>Tramonto is currently in the early development stage!
 
 ## Features
 - [ ] Random role assingment

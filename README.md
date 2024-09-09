@@ -5,7 +5,7 @@ Simple Mafia role assigner.
 >[!CAUTION]
 >Tramonto is currently in the early development stage!
 
-## Features
+## Roadmap
 - [ ] Random role assingment
 - [ ] Customizable roles
 - [ ] Role management

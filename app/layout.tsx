@@ -31,8 +31,22 @@ export default function RootLayout({
                                 {children}
                             </div>
 
-                            <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 h-20">
-                                Tramonto by Baby Came Home
+                            <footer className="w-full flex items-center justify-center mx-auto text-center text-xs h-20">
+                                <p>
+                                    <a
+                                        href="https://github.com/ImDarkly/tramonto"
+                                        className="hover:underline"
+                                    >
+                                        Tramonto
+                                    </a>{" "}
+                                    by{" "}
+                                    <a
+                                        href="https://github.com/ImDarkly"
+                                        className="hover:underline"
+                                    >
+                                        Baby Came Home
+                                    </a>
+                                </p>
                             </footer>
                         </div>
                     </main>

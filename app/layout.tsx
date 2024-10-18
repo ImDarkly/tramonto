@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
     children,
@@ -51,6 +52,7 @@ export default function RootLayout({
                         </div>
                     </main>
                 </ThemeProvider>
+                <Toaster position="top-center" />
             </body>
         </html>
     );

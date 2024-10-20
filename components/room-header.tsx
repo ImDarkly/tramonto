@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { CircleX, Ghost } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { useRoom } from "@/hooks/useRoom";
-import { Badge } from "./ui/badge";
 
 export default function RoomHeader() {
     const { room_code } = useParams();
@@ -47,16 +46,6 @@ export default function RoomHeader() {
                     <ThemeSwitcher />
                 </>
             )}
-            <Badge
-                variant="secondary"
-                className="absolute gap-2 left-2/4 top-24 transform -translate-x-1/2"
-            >
-                Players: 1
-                <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-            </Badge>
         </nav>
     );
 }

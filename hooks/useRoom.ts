@@ -1,95 +1,87 @@
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
+import { useNotificationHandler } from "./useNotificationHandler";
+import { useBoundStore } from "@/zustand/store";
+import { useParams } from "next/navigation";
 
-export function useRoom(roomCode: string | null) {
-    const supabase = useMemo(() => createClient(), []);
-    const [roomData, setRoomData] = useState<any | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const { fetchUser, signInAnonymously } = useAuth();
-    const initializationRef = useRef(false);
+const supabase = createClient();
 
-    useEffect(() => {
-        async function fetchRoomData() {
-            if (!roomCode || initializationRef.current) return;
-            initializationRef.current = true;
+const fetchRoomData = async (code: string) => {
+    const { data, error } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("room_code", code)
+        .limit(1)
+        .single();
+    return { data, error };
+};
 
-            if (!roomCode) {
-                setIsLoading(false);
-                return;
-            }
+const checkExistingParticipant = async (roomId: string, userId: string) => {
+    const { data, error } = await supabase
+        .from("room_participants")
+        .select("*")
+        .eq("room_id", roomId)
+        .eq("user_id", userId);
+    return { data, error };
+};
 
-            // Fetch current authenticated user
-            let currentUser = await fetchUser();
+const addParticipantToRoom = async (roomId: string, userId: string) => {
+    const { error } = await supabase
+        .from("room_participants")
+        .insert([{ room_id: roomId, user_id: userId }]);
+    return { error };
+};
 
-            // If no user, sign in anonymously
-            if (!currentUser) {
-                currentUser = await signInAnonymously();
-            }
+export function useRoom() {
+    const { code, setCode } = useBoundStore((state) => ({
+        code: state.code,
+        setCode: state.setCode,
+    }));
+    const { getAuthenticatedUser } = useAuth();
+    const handleNotification = useNotificationHandler();
+    const params = useParams<{ code: string }>();
 
-            const { data: room, error: roomError } = await supabase
-                .from("rooms")
-                .select("*")
-                .eq("room_code", roomCode)
-                .single();
+    const joinRoom = async (roomCode: string) => {
+        const user = await getAuthenticatedUser();
 
-            // Check if the user is already a participant in the room
-            const { data: existingParticipants, error: participantCheckError } =
-                await supabase
-                    .from("room_participants")
-                    .select("*")
-                    .eq("room_id", room.id)
-                    .eq("user_id", currentUser?.id);
-
-            if (participantCheckError) {
-                toast.error("Error Checking Participation", {
-                    description:
-                        "We encountered an issue while checking your participation status. Please try again later.",
-                });
-                console.log(participantCheckError.message);
-                setIsLoading(false);
-                return;
-            }
-
-            // Check if any existing participants were found
-            if (existingParticipants.length === 0) {
-                // No existing participant, insert them into the room_participants table
-                const { error: participantError } = await supabase
-                    .from("room_participants")
-                    .insert([{ room_id: room.id, user_id: currentUser?.id }]);
-
-                if (participantError) {
-                    toast.error("Failed to Join Room", {
-                        description:
-                            "We encountered an issue while trying to join the room. Please check your network connection or try again later.",
-                    });
-                    console.log(participantError.message);
-                } else {
-                    toast.success("Successfully joined the room!", {
-                        description: "Welcome to the room!",
-                    });
-                }
-            } else {
-                toast.info("You are already a participant in this room.", {
-                    description: "Feel free to continue participating!",
-                });
-            }
-
-            if (roomError) {
-                toast.error("Room Not Found", {
-                    description:
-                        "We couldn't retrieve the room information. Please make sure the room code is correct and try again.",
-                });
-            } else {
-                setRoomData(room);
-            }
-
-            setIsLoading(false);
+        const { data: roomData, error: roomError } =
+            await fetchRoomData(roomCode);
+        if (roomError || !roomData) {
+            handleNotification("ROOM_NOT_FOUND", { code: roomCode });
+            return;
         }
 
-        fetchRoomData();
-    }, [roomCode]);
+        const { data: existingParticipants, error: participantCheckError } =
+            await checkExistingParticipant(roomData.id, user.id);
+        if (participantCheckError) {
+            handleNotification("PARTICIPATION_CHECK");
+            return;
+        }
 
-    return { roomData, isLoading };
+        if (existingParticipants.length === 0) {
+            const { error: participantError } = await addParticipantToRoom(
+                roomData.id,
+                user.id
+            );
+            if (participantError) {
+                handleNotification("FAILED_TO_JOIN_ROOM");
+                console.error("Failed to join room:", participantError.message);
+            } else {
+                handleNotification("SUCCESSFULLY_JOINED_ROOM");
+            }
+        } else {
+            handleNotification("ALREADY_PARTICIPANT");
+        }
+
+        setCode(roomData.room_code);
+    };
+
+    useEffect(() => {
+        if (params.code && params.code !== code) {
+            joinRoom(params.code);
+        }
+    }, []);
+
+    return { code };
 }

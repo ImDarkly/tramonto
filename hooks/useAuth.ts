@@ -1,10 +1,11 @@
 import { createClient } from "@/utils/supabase/client";
-import { useAuthStore } from "@/zustand/store";
-import { toast } from "sonner";
+import { useNotificationHandler } from "./useNotificationHandler";
+import { useBoundStore } from "@/zustand/store";
 
 export function useAuth() {
     const supabase = createClient();
-    const { user, setUser } = useAuthStore();
+    const { user, setUser } = useBoundStore();
+    const handleError = useNotificationHandler();
 
     const fetchUser = async () => {
         if (user) return user;
@@ -12,7 +13,6 @@ export function useAuth() {
         // Check Supabase session directly
         const {
             data: { user: fetchedUser },
-            error,
         } = await supabase.auth.getUser();
 
         if (fetchedUser) {
@@ -28,10 +28,7 @@ export function useAuth() {
             error,
         } = await supabase.auth.signInAnonymously();
         if (error) {
-            toast.error("Anonymous Sign-In Failed", {
-                description:
-                    "Unable to complete anonymous sign-in. Please try again later or contact support if the issue persists.",
-            });
+            handleError("ANONYMOUS_SIGNIN_FAILED");
             return null;
         }
 
@@ -39,5 +36,13 @@ export function useAuth() {
         return newUser;
     };
 
-    return { user, fetchUser, signInAnonymously };
+    const getAuthenticatedUser = async () => {
+        let currentUser = await fetchUser();
+        if (!currentUser) {
+            currentUser = await signInAnonymously();
+        }
+        return currentUser;
+    };
+
+    return { user, fetchUser, signInAnonymously, getAuthenticatedUser };
 }

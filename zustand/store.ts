@@ -1,13 +1,10 @@
 import { create } from "zustand";
+import { AuthActions, AuthState, createAuthSlice } from "./slices/authSlice";
+import { createRoomSlice, RoomActions, RoomState } from "./slices/roomSlice";
 
-interface AuthState {
-    user: any | null;
-    setUser: (user: any) => void;
-    clearUser: () => void;
-}
+type Store = RoomState & RoomActions & AuthState & AuthActions;
 
-export const useAuthStore = create<AuthState>((set) => ({
-    user: null,
-    setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
+export const useBoundStore = create<Store>()((set, get, store) => ({
+    ...createRoomSlice(set, get, store),
+    ...createAuthSlice(set, get, store),
 }));

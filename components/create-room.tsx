@@ -4,18 +4,11 @@ import { Loader2 } from "lucide-react";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
 
 export default function CreateRoom() {
-    const { createRoom, isLoading } = useCreateRoom();
+    const { createRoom } = useCreateRoom();
 
     return (
-        <Button variant="outline" disabled={isLoading} onClick={createRoom}>
-            {isLoading ? (
-                <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {"Creating Room..."}
-                </>
-            ) : (
-                "Create Room"
-            )}
+        <Button variant="outline" onClick={createRoom}>
+            Create Room
         </Button>
     );
 }

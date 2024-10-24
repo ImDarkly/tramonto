@@ -3,7 +3,6 @@ import { ThemeSwitcher } from "./theme-switcher";
 import { Button } from "./ui/button";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { CircleX, Ghost } from "lucide-react";
 import { useJoinRoom } from "@/hooks/useJoinRoom";
 import { Suspense, useEffect, useRef } from "react";
 import { useBoundStore } from "@/zustand/store";

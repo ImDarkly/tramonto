@@ -38,6 +38,11 @@ export const NOTIFICATION_MESSAGES = {
         description: "Your room code is #{code}.",
         severity: "success" as const,
     },
+    ROOM_DELETED_SUCCESSFULLY: {
+        title: "Room deleted successfully!",
+        description: "The room has been deleted successfully.",
+        severity: "success" as const,
+    },
 } as const;
 
 export type NotificationKey = keyof typeof NOTIFICATION_MESSAGES;

@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useAuth } from "./useAuth";
 import { useNotificationHandler } from "./useNotificationHandler";
 import { useBoundStore } from "@/zustand/store";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const supabase = createClient();
 
@@ -36,6 +36,7 @@ export function useJoinRoom() {
     const { code, setCode } = useBoundStore();
     const { getAuthenticatedUser } = useAuth();
     const handleNotification = useNotificationHandler();
+    const router = useRouter();
 
     const joinRoom = async (roomCode: string) => {
         const user = await getAuthenticatedUser();
@@ -45,6 +46,7 @@ export function useJoinRoom() {
             handleNotification("ROOM_NOT_FOUND", {
                 code: roomCode.toUpperCase(),
             });
+            router.push(`/`);
             return;
         }
 
@@ -63,7 +65,6 @@ export function useJoinRoom() {
 
             if (participantError) {
                 handleNotification("FAILED_TO_JOIN_ROOM");
-                console.error("Failed to join room:", participantError.message);
             }
         }
 

@@ -1,4 +1,5 @@
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { useRoom } from "@/hooks/useJoinRoom";
 
 export default function HomeLayout({
     children,

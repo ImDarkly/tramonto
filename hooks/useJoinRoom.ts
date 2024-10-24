@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
 import { useNotificationHandler } from "./useNotificationHandler";
 import { useBoundStore } from "@/zustand/store";
@@ -7,7 +6,7 @@ import { useParams } from "next/navigation";
 
 const supabase = createClient();
 
-const fetchRoomData = async (code: string) => {
+const fetchRoom = async (code: string) => {
     const { data, error } = await supabase
         .from("rooms")
         .select("*")
@@ -33,22 +32,19 @@ const addParticipantToRoom = async (roomId: string, userId: string) => {
     return { error };
 };
 
-export function useRoom() {
-    const { code, setCode } = useBoundStore((state) => ({
-        code: state.code,
-        setCode: state.setCode,
-    }));
+export function useJoinRoom() {
+    const { code, setCode } = useBoundStore();
     const { getAuthenticatedUser } = useAuth();
     const handleNotification = useNotificationHandler();
-    const params = useParams<{ code: string }>();
 
     const joinRoom = async (roomCode: string) => {
         const user = await getAuthenticatedUser();
 
-        const { data: roomData, error: roomError } =
-            await fetchRoomData(roomCode);
+        const { data: roomData, error: roomError } = await fetchRoom(roomCode);
         if (roomError || !roomData) {
-            handleNotification("ROOM_NOT_FOUND", { code: roomCode });
+            handleNotification("ROOM_NOT_FOUND", {
+                code: roomCode.toUpperCase(),
+            });
             return;
         }
 
@@ -64,24 +60,19 @@ export function useRoom() {
                 roomData.id,
                 user.id
             );
+
             if (participantError) {
                 handleNotification("FAILED_TO_JOIN_ROOM");
                 console.error("Failed to join room:", participantError.message);
-            } else {
-                handleNotification("SUCCESSFULLY_JOINED_ROOM");
             }
-        } else {
-            handleNotification("ALREADY_PARTICIPANT");
         }
 
-        setCode(roomData.room_code);
+        if (code !== roomData.room_code) {
+            setCode(roomData.room_code);
+        }
     };
 
-    useEffect(() => {
-        if (params.code && params.code !== code) {
-            joinRoom(params.code);
-        }
-    }, []);
+    //const createRoom
 
-    return { code };
+    return { joinRoom };
 }

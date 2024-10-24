@@ -8,7 +8,7 @@ export const NOTIFICATION_MESSAGES = {
     ROOM_NOT_FOUND: {
         title: "Room Not Found",
         description:
-            "We couldn't retrieve the room information for code: {roomCode}. Please make sure the room code is correct and try again.",
+            "We couldn't retrieve the room information for code: #{code}. Please make sure the room code is correct and try again.",
         severity: "warning" as const,
     },
     ALREADY_PARTICIPANT: {
@@ -35,7 +35,7 @@ export const NOTIFICATION_MESSAGES = {
     },
     ROOM_CREATED_SUCCESSFULLY: {
         title: "Room created successfully!",
-        description: "Your room code is {roomCode}.",
+        description: "Your room code is #{code}.",
         severity: "success" as const,
     },
 } as const;

@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useJoinRoom } from "@/hooks/useJoinRoom";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useBoundStore } from "@/zustand/store";
 
 export default function RoomHeader() {

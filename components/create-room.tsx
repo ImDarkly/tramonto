@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
 
 export default function CreateRoom() {

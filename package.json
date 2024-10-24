@@ -4,7 +4,9 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start"
+        "start": "next start",
+        "lint": "next lint",
+        "lint:fix": "next lint --fix"
     },
     "dependencies": {
         "@radix-ui/react-checkbox": "^1.1.1",
@@ -16,6 +18,8 @@
         "autoprefixer": "10.4.17",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "eslint": "^8.57.1",
+        "eslint-config-next": "^15.0.1",
         "geist": "^1.2.1",
         "lucide-react": "^0.436.0",
         "next": "latest",

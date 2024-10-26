@@ -16,13 +16,13 @@ const fetchRoom = async (code: string) => {
     return { data, error };
 };
 
-export function useRemoveRoom() {
+export function useDeleteRoom() {
     const { getAuthenticatedUser } = useAuth();
     const handleNotification = useNotificationHandler();
     const { code } = useBoundStore();
     const router = useRouter();
 
-    const removeRoom = async () => {
+    const deleteRoom = async () => {
         // Fetch current authenticated user
         const user = await getAuthenticatedUser();
 
@@ -43,5 +43,5 @@ export function useRemoveRoom() {
         router.push(`/`);
     };
 
-    return { removeRoom };
+    return { deleteRoom };
 }

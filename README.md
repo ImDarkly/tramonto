@@ -10,7 +10,9 @@ Simple Mafia role assigner.
 ### v1
 
 -   [x] Theme switcher
+-   [x] Create/delete rooms
 -   [ ] Random role assingment
+-   [ ] Preview role description
 
 ### v2
 

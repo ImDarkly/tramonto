@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { useJoinRoom } from "@/hooks/useJoinRoom";
 import { useEffect, useRef } from "react";
 import { useBoundStore } from "@/zustand/store";
+import { Badge } from "./ui/badge";
+import { useIsMaster } from "@/hooks/useIsMaster";
 
 export default function RoomHeader() {
     const { code } = useBoundStore();
@@ -14,6 +16,7 @@ export default function RoomHeader() {
     const searchParams = useSearchParams();
     const params = useParams<{ code: string }>();
     const processedCodeRef = useRef<string | null>(null);
+    const isMaster = useIsMaster();
 
     useEffect(() => {
         if (
@@ -35,13 +38,16 @@ export default function RoomHeader() {
 
     return (
         <nav className="flex h-20 w-full items-center justify-between px-4 border-b">
-            <Button
-                variant="ghost"
-                className="uppercase"
-                onClick={handleCopyCode}
-            >
-                #{code}
-            </Button>
+            <div className="gap-2 flex items-center">
+                <Button
+                    variant="ghost"
+                    className="gap-2"
+                    onClick={handleCopyCode}
+                >
+                    #{code.toUpperCase()}
+                </Button>
+                {isMaster && <Badge>Master</Badge>}
+            </div>
             <ThemeSwitcher />
         </nav>
     );

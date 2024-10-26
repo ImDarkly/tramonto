@@ -19,8 +19,8 @@ export default function DeleteRoom() {
 
     return (
         <AlertDialog>
-            <AlertDialogTrigger>
-                <Button variant="outline">Delete Room</Button>
+            <AlertDialogTrigger asChild>
+                <Button variant="destructive">Delete Room</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

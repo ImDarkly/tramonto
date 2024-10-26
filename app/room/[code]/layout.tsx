@@ -1,3 +1,4 @@
+import RoomFooter from "@/components/room-footer";
 import RoomHeader from "@/components/room-header";
 
 export default function RoomLayout({
@@ -11,6 +12,7 @@ export default function RoomLayout({
             <div className="flex flex-col flex-grow items-center justify-center">
                 {children}
             </div>
+            <RoomFooter />
         </main>
     );
 }

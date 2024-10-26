@@ -73,7 +73,5 @@ export function useJoinRoom() {
         }
     };
 
-    //const createRoom
-
     return { joinRoom };
 }

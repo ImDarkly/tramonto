@@ -38,6 +38,23 @@ export const NOTIFICATION_MESSAGES = {
         description: "Your room code is #{code}.",
         severity: "success" as const,
     },
+    ROOM_DELETED_SUCCESSFULLY: {
+        title: "Room deleted successfully!",
+        description: "The room has been deleted successfully.",
+        severity: "success" as const,
+    },
+    FAILED_TO_FETCH_PLAYER_COUNT: {
+        title: "Failed to Fetch Player Count",
+        description:
+            "We encountered an issue while retrieving the player count for room code: #{code}. Please try again later.",
+        severity: "error" as const,
+    },
+    URL_COPIED_SUCCESSFULLY: {
+        title: "URL Copied",
+        description:
+            "The room link has been copied to your clipboard. Share it with others to invite them!",
+        severity: "success" as const,
+    },
 } as const;
 
 export type NotificationKey = keyof typeof NOTIFICATION_MESSAGES;

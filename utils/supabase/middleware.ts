@@ -1,12 +1,41 @@
 import { createServerClient } from "@supabase/ssr";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 
+const getUserRoom = async (supabase: SupabaseClient, userId: string) => {
+    const { data: participantData, error: participantError } = await supabase
+        .from("room_participants")
+        .select("room_id")
+        .eq("user_id", userId)
+        .single();
+
+    if (!participantData) return null;
+
+    const { data: roomData, error: roomError } = await supabase
+        .from("rooms")
+        .select("room_code, master_id")
+        .eq("id", participantData.room_id)
+        .single();
+
+    return roomData;
+};
+
+const checkMasterAccess = async (
+    supabase: SupabaseClient,
+    roomCode: string,
+    userId: string
+) => {
+    const { data: roomData, error: roomError } = await supabase
+        .from("rooms")
+        .select("master_id")
+        .eq("room_code", roomCode)
+        .single();
+
+    return roomData?.master_id === userId;
+};
+
 export const updateSession = async (request: NextRequest) => {
-    let response = NextResponse.next({
-        request: {
-            headers: request.headers,
-        },
-    });
+    let response = NextResponse.next();
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -36,45 +65,29 @@ export const updateSession = async (request: NextRequest) => {
         error: userError,
     } = await supabase.auth.getUser();
 
-    console.log("User:", user); // Inspect the user object
-
-    // Check for protected route access
-    if (request.nextUrl.pathname.startsWith("/protected") && userError) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
+    if (userError || !user) {
+        return null;
     }
 
-    // Check if user is logged in and has a room code
-    if (request.nextUrl.pathname === "/" && user && !userError) {
-        // First, get the room_id from room_participants table
-        const { data: participantData, error: participantError } =
-            await supabase
-                .from("room_participants")
-                .select("room_id")
-                .eq("user_id", user.id)
-                .single();
+    const urlParts = request.nextUrl.pathname.split("/");
+    if (urlParts[1] === "room") {
+        const roomCode = urlParts[2];
+        const isMasterRoute = urlParts[3] === "master";
 
-        if (participantError) {
-            console.error("Error fetching room participant:", participantError);
-            return response;
-        }
+        const roomData = await getUserRoom(supabase, user.id);
 
-        if (participantData) {
-            // Now, get the room_code from rooms table using the room_id
-            const { data: roomData, error: roomError } = await supabase
-                .from("rooms")
-                .select("room_code")
-                .eq("id", participantData.room_id)
-                .single();
+        if (roomData) {
+            const isMaster = roomData.master_id === user.id;
 
-            if (roomError) {
-                console.error("Error fetching room:", roomError);
-                return response;
-            }
-
-            if (roomData) {
-                const roomCode = roomData.room_code;
+            if (isMaster && !isMasterRoute) {
                 return NextResponse.redirect(
                     new URL(`/room/${roomCode}/master`, request.url)
+                );
+            }
+
+            if (!isMaster && isMasterRoute) {
+                return NextResponse.redirect(
+                    new URL(`/room/${roomCode}`, request.url)
                 );
             }
         }

@@ -1,20 +1,20 @@
 "use client";
 import { ThemeSwitcher } from "./theme-switcher";
-import { Button } from "./ui/button";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
-import { CircleX, Ghost } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useJoinRoom } from "@/hooks/useJoinRoom";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useBoundStore } from "@/zustand/store";
+import { Badge } from "./ui/badge";
+import { useIsMaster } from "@/hooks/useIsMaster";
+import PlayerCount from "./player-count";
+import CopyRoomCode from "./copy-room-code";
 
 export default function RoomHeader() {
-    const { code } = useBoundStore();
     const { joinRoom } = useJoinRoom();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
     const params = useParams<{ code: string }>();
     const processedCodeRef = useRef<string | null>(null);
+    const isMaster = useIsMaster();
+    const { code } = useBoundStore();
 
     useEffect(() => {
         if (
@@ -27,22 +27,13 @@ export default function RoomHeader() {
         }
     }, [params.code, code, joinRoom]);
 
-    const handleCopyCode = () => {
-        const currentUrl = `${window.location.origin}${pathname.replace("/master", "")}${searchParams ? `${searchParams.toString()}` : ""}`;
-        navigator.clipboard.writeText(currentUrl).then(() => {
-            toast.success("Room URL copied to clipboard!");
-        });
-    };
-
     return (
         <nav className="flex h-20 w-full items-center justify-between px-4 border-b">
-            <Button
-                variant="ghost"
-                className="uppercase"
-                onClick={handleCopyCode}
-            >
-                #{code}
-            </Button>
+            <div className="gap-2 flex items-center">
+                <CopyRoomCode />
+                {isMaster && <Badge>Master</Badge>}
+            </div>
+            <PlayerCount />
             <ThemeSwitcher />
         </nav>
     );

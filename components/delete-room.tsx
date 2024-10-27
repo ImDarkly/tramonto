@@ -35,7 +35,10 @@ export default function DeleteRoom() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteRoom}>
+                    <AlertDialogAction
+                        className="bg-destructive/90 text-destructive-foreground hover:bg-destructive"
+                        onClick={deleteRoom}
+                    >
                         Delete
                     </AlertDialogAction>
                 </AlertDialogFooter>

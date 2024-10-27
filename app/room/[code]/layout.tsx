@@ -9,7 +9,7 @@ export default function RoomLayout({
     return (
         <main className="h-svh flex flex-col items-center">
             <RoomHeader />
-            <div className="flex flex-col flex-grow items-center justify-center">
+            <div className="flex px-4 w-full flex-col flex-grow items-center justify-center">
                 {children}
             </div>
             <RoomFooter />

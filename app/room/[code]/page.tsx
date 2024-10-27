@@ -1,3 +1,5 @@
+import RoleCard from "@/components/ui/role-card";
+
 export default async function PlayerView() {
-    <p>PlayerRoom</p>;
+    return <RoleCard color="blue" />;
 }

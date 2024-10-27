@@ -13,10 +13,7 @@ const Ping = () => {
 export default function PlayerCount() {
     const playerCount = useRoomPlayers();
     return (
-        <Badge
-            variant="secondary"
-            className="absolute left-2/4 gap-2 -translate-x-2/4 top-24"
-        >
+        <Badge variant="secondary" className="gap-2">
             Connected players: {playerCount}
             <Ping />
         </Badge>

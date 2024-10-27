@@ -28,13 +28,17 @@ export default function RoomHeader() {
     }, [params.code, code, joinRoom]);
 
     return (
-        <nav className="flex h-20 w-full items-center justify-between px-4 border-b">
-            <div className="gap-2 flex items-center">
-                <CopyRoomCode />
-                {isMaster && <Badge>Master</Badge>}
+        <nav className="w-full">
+            <div className="flex min-h-20 w-full items-center justify-between px-4 border-b">
+                <div className="gap-2 flex items-center">
+                    <CopyRoomCode />
+                    {isMaster && <Badge>Master</Badge>}
+                </div>
+                <ThemeSwitcher />
             </div>
-            <PlayerCount />
-            <ThemeSwitcher />
+            <div className="justify-center flex py-4">
+                <PlayerCount />
+            </div>
         </nav>
     );
 }

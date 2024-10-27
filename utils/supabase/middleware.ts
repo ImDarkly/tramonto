@@ -70,26 +70,31 @@ export const updateSession = async (request: NextRequest) => {
     }
 
     const urlParts = request.nextUrl.pathname.split("/");
+
     if (urlParts[1] === "room") {
         const roomCode = urlParts[2];
-        const isMasterRoute = urlParts[3] === "master";
+        const isMaster = await checkMasterAccess(supabase, roomCode, user.id);
 
+        if (urlParts[3] === "master" && !isMaster) {
+            return NextResponse.redirect(
+                new URL(`/room/${roomCode}`, request.url)
+            );
+        } else if (urlParts[3] !== "master" && isMaster) {
+            return NextResponse.redirect(
+                new URL(`/room/${roomCode}/master`, request.url)
+            );
+        }
+    } else if (urlParts[1] !== "room") {
         const roomData = await getUserRoom(supabase, user.id);
-
         if (roomData) {
-            const isMaster = roomData.master_id === user.id;
-
-            if (isMaster && !isMasterRoute) {
-                return NextResponse.redirect(
-                    new URL(`/room/${roomCode}/master`, request.url)
-                );
-            }
-
-            if (!isMaster && isMasterRoute) {
-                return NextResponse.redirect(
-                    new URL(`/room/${roomCode}`, request.url)
-                );
-            }
+            const { room_code, master_id } = roomData;
+            const isMaster = master_id === user.id;
+            return NextResponse.redirect(
+                new URL(
+                    `/room/${room_code}${isMaster ? "/master" : ""}`,
+                    request.url
+                )
+            );
         }
     }
 

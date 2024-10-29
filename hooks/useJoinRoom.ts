@@ -2,19 +2,10 @@ import { createClient } from "@/utils/supabase/client";
 import { useAuth } from "./useAuth";
 import { useNotificationHandler } from "./useNotificationHandler";
 import { useBoundStore } from "@/zustand/store";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useFetchRoom } from "./useFetchRoom";
 
 const supabase = createClient();
-
-const fetchRoom = async (code: string) => {
-    const { data, error } = await supabase
-        .from("rooms")
-        .select("*")
-        .eq("room_code", code)
-        .limit(1)
-        .single();
-    return { data, error };
-};
 
 const checkExistingParticipant = async (roomId: string, userId: string) => {
     const { data, error } = await supabase
@@ -37,6 +28,7 @@ export function useJoinRoom() {
     const { getAuthenticatedUser } = useAuth();
     const handleNotification = useNotificationHandler();
     const router = useRouter();
+    const { fetchRoom } = useFetchRoom();
 
     const joinRoom = async (roomCode: string) => {
         const user = await getAuthenticatedUser();

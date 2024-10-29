@@ -3,24 +3,16 @@ import { useAuth } from "./useAuth";
 import { useNotificationHandler } from "./useNotificationHandler";
 import { useBoundStore } from "@/zustand/store";
 import { useRouter } from "next/navigation";
+import { useFetchRoom } from "./useFetchRoom";
 
 const supabase = createClient();
-
-const fetchRoom = async (code: string) => {
-    const { data, error } = await supabase
-        .from("rooms")
-        .select("*")
-        .eq("room_code", code)
-        .limit(1)
-        .single();
-    return { data, error };
-};
 
 export function useDeleteRoom() {
     const { getAuthenticatedUser } = useAuth();
     const handleNotification = useNotificationHandler();
     const { code } = useBoundStore();
     const router = useRouter();
+    const { fetchRoom } = useFetchRoom();
 
     const deleteRoom = async () => {
         // Fetch current authenticated user

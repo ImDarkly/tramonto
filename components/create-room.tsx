@@ -6,7 +6,7 @@ export default function CreateRoom() {
     const { createRoom } = useCreateRoom();
 
     return (
-        <Button variant="outline" onClick={createRoom}>
+        <Button variant="outline" className="w-full" onClick={createRoom}>
             Create Room
         </Button>
     );

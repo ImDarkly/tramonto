@@ -14,7 +14,7 @@ export default async function Index() {
         <Card className="flex flex-col border-transparent bg-transparent gap-8">
             <CardHeader className="w-full flex">
                 <CardTitle>Join or Create Room</CardTitle>
-                <CardDescription className="max-w-[240px] break-words w-fit ">
+                <CardDescription className="max-w-[280px] break-words w-fit ">
                     Enter a room code to join or create a new room
                 </CardDescription>
             </CardHeader>

@@ -14,7 +14,7 @@ export default function RoomHeader() {
     const params = useParams<{ code: string }>();
     const processedCodeRef = useRef<string | null>(null);
     const isMaster = useIsMaster();
-    const { code } = useBoundStore();
+    const { id, code } = useBoundStore();
 
     useEffect(() => {
         if (

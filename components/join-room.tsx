@@ -24,6 +24,8 @@ export default function JoinRoom() {
 
     const handleJoinRoom = () => {
         if (isRoomValid) {
+            console.log(inputCode);
+
             router.push(`/room/${inputCode}`);
         }
     };
@@ -32,7 +34,10 @@ export default function JoinRoom() {
         if (code.length === 6) {
             const { data, error } = await fetchRoom(code);
             if (error) {
-                handleNotification("ROOM_NOT_FOUND", { code });
+                handleNotification("ROOM_NOT_FOUND", {
+                    code: code.toLocaleUpperCase(),
+                });
+                setInputCode("");
             }
             setIsRoomValid(!!data);
         } else {
@@ -69,7 +74,11 @@ export default function JoinRoom() {
                     </InputOTP>
                 </div>
             </div>
-            <Button disabled={!isRoomValid} onClick={handleJoinRoom}>
+            <Button
+                type="button"
+                disabled={!isRoomValid}
+                onClick={handleJoinRoom}
+            >
                 Join Room
             </Button>
         </form>

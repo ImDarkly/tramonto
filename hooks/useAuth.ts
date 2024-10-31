@@ -33,6 +33,8 @@ export function useAuth() {
         }
 
         setUser(newUser);
+        console.log("Anonymously signed in!");
+
         return newUser;
     };
 

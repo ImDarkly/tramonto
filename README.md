@@ -14,7 +14,7 @@ Simple Mafia role assigner.
 -   [x] Random role assingment
 -   [x] Preview role description
 
-### v2
+### v2?
 
 -   [ ] Role management
 -   [ ] Customizable roles

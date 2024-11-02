@@ -2,7 +2,6 @@
 import { cn } from "@/lib/utils";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import * as motion from "framer-motion/client";
-import { useFetchUserRole } from "@/hooks/useFetchUserRole";
 import { useBoundStore } from "@/zustand/store";
 import { useRoleInfo } from "@/hooks/useRoleInfo";
 

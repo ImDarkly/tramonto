@@ -7,15 +7,15 @@ import { useFetchRoom } from "@/hooks/useFetchRoom";
 
 const supabase = createClient();
 
-export default function () {
+export default function AssignRoles() {
     const connectedPlayers = useRoomPlayers();
     const { code } = useBoundStore();
     const { fetchRoom } = useFetchRoom();
 
     const assignRoles = async () => {
-        const { data: roomData, error: roomError } = await fetchRoom(code);
+        const { data: roomData } = await fetchRoom(code);
 
-        const { data, error } = await supabase.rpc("assign_roles", {
+        const {} = await supabase.rpc("assign_roles", {
             p_room_id: roomData.id,
         });
     };

@@ -2,7 +2,6 @@
 import { useLeaveRoom } from "@/hooks/useLeaveRoom";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { useBoundStore } from "@/zustand/store";
 
 export default function LeaveRoom() {
     const leaveRoom = useLeaveRoom();

@@ -1,7 +1,6 @@
 "use client";
 import { useIsMaster } from "@/hooks/useIsMaster";
 import DeleteRoom from "./delete-room";
-import { Button } from "./ui/button";
 import LeaveRoom from "./leave-room";
 
 export default function RoomFooter() {

@@ -3,7 +3,9 @@ const nextConfig = {};
 
 module.exports = {
     eslint: {
-        ignorePatterns: ["components/ui/*.tsx"],
+        eslint: {
+            ignoreDuringBuilds: ["components/ui/*.tsx"],
+        },
     },
 };
 

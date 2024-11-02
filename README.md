@@ -11,8 +11,8 @@ Simple Mafia role assigner.
 
 -   [x] Theme switcher
 -   [x] Create/delete rooms
--   [ ] Random role assingment
--   [ ] Preview role description
+-   [x] Random role assingment
+-   [x] Preview role description
 
 ### v2
 

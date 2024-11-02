@@ -9,7 +9,6 @@ import { useIsMaster } from "@/hooks/useIsMaster";
 import PlayerCount from "./player-count";
 import CopyRoomCode from "./copy-room-code";
 import useCheckRoom from "@/hooks/useCheckRoom";
-import { useFetchRoom } from "@/hooks/useFetchRoom";
 import { useRouter } from "next/navigation";
 
 export default function RoomHeader() {
@@ -18,7 +17,6 @@ export default function RoomHeader() {
     const processedCodeRef = useRef<string | null>(null);
     const isMaster = useIsMaster();
     const { code, setCode } = useBoundStore();
-    const { fetchRoom } = useFetchRoom();
     const roomDeleted = useCheckRoom(code);
     const router = useRouter();
 

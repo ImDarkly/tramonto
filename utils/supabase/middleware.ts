@@ -92,6 +92,7 @@ export const updateSession = async (request: NextRequest) => {
             return NextResponse.redirect(
                 new URL(
                     `/room/${room_code}${isMaster ? "/master" : ""}`,
+
                     request.url
                 )
             );

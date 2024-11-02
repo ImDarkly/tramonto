@@ -8,13 +8,19 @@ import { Badge } from "./ui/badge";
 import { useIsMaster } from "@/hooks/useIsMaster";
 import PlayerCount from "./player-count";
 import CopyRoomCode from "./copy-room-code";
+import useCheckRoom from "@/hooks/useCheckRoom";
+import { useFetchRoom } from "@/hooks/useFetchRoom";
+import { useRouter } from "next/navigation";
 
 export default function RoomHeader() {
     const { joinRoom } = useJoinRoom();
     const params = useParams<{ code: string }>();
     const processedCodeRef = useRef<string | null>(null);
     const isMaster = useIsMaster();
-    const { id, code } = useBoundStore();
+    const { code, setCode } = useBoundStore();
+    const { fetchRoom } = useFetchRoom();
+    const roomDeleted = useCheckRoom(code);
+    const router = useRouter();
 
     useEffect(() => {
         if (
@@ -26,6 +32,14 @@ export default function RoomHeader() {
             joinRoom(params.code);
         }
     }, [params.code, code, joinRoom]);
+
+    useEffect(() => {
+        if (roomDeleted) {
+            console.log("Room has been deleted, redirecting to home");
+            setCode("");
+            router.push("/");
+        }
+    }, [roomDeleted, router, setCode]);
 
     return (
         <nav className="w-full">

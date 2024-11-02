@@ -30,12 +30,7 @@ export function useRoomPlayers() {
                 .channel(`room_${code}`)
                 .on(
                     "postgres_changes",
-                    {
-                        event: "*",
-                        schema: "public",
-                        table: "rooms",
-                        filter: `room_code=eq.${code}`,
-                    },
+                    { event: "UPDATE", schema: "public", table: "rooms" },
                     (payload: { new: { player_count: number } }) => {
                         if (payload.new && "player_count" in payload.new) {
                             setPlayerCount(payload.new.player_count as number);

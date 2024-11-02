@@ -24,8 +24,6 @@ export default function JoinRoom() {
 
     const handleJoinRoom = () => {
         if (isRoomValid) {
-            console.log(inputCode);
-
             router.push(`/room/${inputCode}`);
         }
     };

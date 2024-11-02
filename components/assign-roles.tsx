@@ -20,9 +20,18 @@ export default function () {
         });
     };
 
+    const canAssignRoles = connectedPlayers >= 6;
+
     return (
-        <div>
-            <Button onClick={assignRoles}>Assign Roles</Button>
+        <div className="flex flex-col gap-4 items-center">
+            <Button onClick={assignRoles} disabled={!canAssignRoles}>
+                Assign Roles
+            </Button>
+            {!canAssignRoles && (
+                <p className="text-sm text-muted-foreground">
+                    At least 6 players are required to assign roles.
+                </p>
+            )}
         </div>
     );
 }

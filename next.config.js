@@ -3,9 +3,7 @@ const nextConfig = {};
 
 module.exports = {
     eslint: {
-        eslint: {
-            ignoreDuringBuilds: ["components/ui/*.tsx"],
-        },
+        dirs: [],
     },
 };
 

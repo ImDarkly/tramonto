@@ -22,7 +22,8 @@ export default function JoinRoom() {
         checkRoomExists(code);
     };
 
-    const handleJoinRoom = () => {
+    const handleJoinRoom = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (isRoomValid) {
             router.push(`/room/${inputCode}`);
         }
@@ -44,9 +45,9 @@ export default function JoinRoom() {
     };
 
     return (
-        <form className="flex w-fit flex-col gap-4">
+        <form onSubmit={handleJoinRoom} className="flex w-fit flex-col gap-4  ">
             <div className="flex flex-col gap-2">
-                <Label>Room Code</Label>
+                <Label htmlFor="room-code">Room Code</Label>
                 <div className="flex">
                     <div className="flex items-center h-10 justify-center bg-input rounded-l-md aspect-square">
                         <Hash size={16} />
@@ -57,6 +58,7 @@ export default function JoinRoom() {
                         inputMode="text"
                         value={inputCode}
                         onChange={handleInputChange}
+                        id="room-code"
                     >
                         <InputOTPGroup className="uppercase">
                             <InputOTPSlot
@@ -72,13 +74,7 @@ export default function JoinRoom() {
                     </InputOTP>
                 </div>
             </div>
-            <Button
-                type="button"
-                disabled={!isRoomValid}
-                onClick={handleJoinRoom}
-            >
-                Join Room
-            </Button>
+            <Button disabled={!isRoomValid}>Join Room</Button>
         </form>
     );
 }

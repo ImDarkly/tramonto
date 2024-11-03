@@ -1,10 +1,13 @@
 import { ThemeSwitcher } from "@/components/theme-switcher";
+const { version } = require("../../package.json");
 
 export default function HomeLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const isProduction = process.env.NODE_ENV === "production";
+
     return (
         <main className="h-svh flex flex-col items-center">
             <nav className="w-full flex justify-center items-center h-20">
@@ -21,6 +24,9 @@ export default function HomeLayout({
                     >
                         Tramonto
                     </a>{" "}
+                    <span className="bg-muted px-1 py-0.5 rounded">
+                        v{isProduction ? `${version}alpha` : `${version}dev`}
+                    </span>{" "}
                     by{" "}
                     <a
                         href="https://github.com/ImDarkly"

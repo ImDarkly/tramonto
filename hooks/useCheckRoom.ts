@@ -1,20 +1,24 @@
+import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useBoundStore } from "@/zustand/store";
-import { useEffect, useState } from "react";
 import { useFetchRoom } from "./useFetchRoom";
+import { useNotificationHandler } from "./useNotificationHandler";
 
 const supabase = createClient();
 
 export default function useCheckRoom(roomCode: string) {
-    const [roomDeleted, setRoomDeleted] = useState(false);
     const { code } = useBoundStore();
     const { fetchRoom } = useFetchRoom();
+    const handleNotification = useNotificationHandler();
+    const [roomDeleted, setRoomDeleted] = useState(false);
 
     useEffect(() => {
         const fetchAndSubscribe = async () => {
-            const { data, error } = await fetchRoom(code);
-            if (error) {
-                console.error("Error fetching room:", error);
+            const { data: roomData, error: roomError } = await fetchRoom(code);
+            if (roomError) {
+                handleNotification("ROOM_NOT_FOUND", {
+                    code: code.toUpperCase(),
+                });
                 return;
             }
 
@@ -27,10 +31,8 @@ export default function useCheckRoom(roomCode: string) {
                         schema: "public",
                         table: "rooms",
                     },
-                    (payload: any) => {
-                        console.log("Room deletion detected:", payload);
-                        if (payload.old && payload.old.id === data.id) {
-                            console.log("Current room was deleted");
+                    (payload: { old: { id: string } }) => {
+                        if (payload.old && payload.old.id === roomData.id) {
                             setRoomDeleted(true);
                         }
                     }

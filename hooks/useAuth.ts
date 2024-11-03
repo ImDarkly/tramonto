@@ -2,10 +2,11 @@ import { createClient } from "@/utils/supabase/client";
 import { useNotificationHandler } from "./useNotificationHandler";
 import { useBoundStore } from "@/zustand/store";
 
+const supabase = createClient();
+
 export function useAuth() {
-    const supabase = createClient();
     const { user, setUser } = useBoundStore();
-    const handleError = useNotificationHandler();
+    const handleNotifiction = useNotificationHandler();
 
     const fetchUser = async () => {
         if (user) return user;
@@ -28,13 +29,11 @@ export function useAuth() {
             error,
         } = await supabase.auth.signInAnonymously();
         if (error) {
-            handleError("ANONYMOUS_SIGNIN_FAILED");
+            handleNotifiction("ANONYMOUS_SIGNIN_FAILED");
             return null;
         }
 
         setUser(newUser);
-        console.log("Anonymously signed in!");
-
         return newUser;
     };
 
